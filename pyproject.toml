@@ -1,0 +1,16 @@
+[project]
+name = "pressready"
+version = "0.0.1"
+description = "Manuscript in, publish-ready book out: EPUB, print interior PDF and wrap cover for AI agents."
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
