@@ -6,7 +6,7 @@
   - [x] EPUB 3 writer (epub.py) + structure tests (awaiting first CI result)
   - [ ] Interior PDF at trim sizes (pdf.py, ReportLab, embedded Vera fonts; written + tests, awaiting CI)
     - todo: custom font option, running heads, print TOC, non-Latin glyph coverage
-  - [ ] Wrap cover PDF (spine from page count, exact MediaBox)
+  - [ ] Wrap cover PDF (cover.py + tests written, awaiting CI; todo: barcode-box guide option, back-cover styling)
   - [ ] Upload checklist JSON (title warnings, AI disclosure)
   - [ ] End-to-end sample-book test
 - [ ] M2 CLI + MCP server

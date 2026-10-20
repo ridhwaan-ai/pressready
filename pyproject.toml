@@ -3,7 +3,7 @@ name = "pressready"
 version = "0.0.1"
 description = "Manuscript in, publish-ready book out: EPUB, print interior PDF and wrap cover for AI agents."
 requires-python = ">=3.11"
-dependencies = ["reportlab>=4.0"]
+dependencies = ["reportlab>=4.0", "pillow"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pypdf"]
