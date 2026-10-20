@@ -7,8 +7,8 @@
   - [ ] Interior PDF at trim sizes (pdf.py, ReportLab, embedded Vera fonts; written + tests, awaiting CI)
     - todo: custom font option, running heads, print TOC, non-Latin glyph coverage
   - [ ] Wrap cover PDF (cover.py + tests written, awaiting CI; todo: barcode-box guide option, back-cover styling)
-  - [ ] Upload checklist JSON (title warnings, AI disclosure)
-  - [ ] End-to-end sample-book test
+  - [x] Upload checklist JSON (checklist.py: title warnings, AI disclosure; awaiting CI)
+  - [x] build() orchestrator (build.py) + end-to-end test (tests/test_build.py; awaiting CI)
 - [ ] M2 CLI + MCP server
 - [ ] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
 - [ ] M4 Deploy + self-serve keys + pricing (needs Owner)
