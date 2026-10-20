@@ -10,6 +10,8 @@
   - [x] Upload checklist JSON (checklist.py: title warnings, AI disclosure; awaiting CI)
   - [x] build() orchestrator (build.py) + end-to-end test (tests/test_build.py; awaiting CI)
 - [ ] M2 CLI + MCP server
+  - [x] CLI `pressready build` (cli.py + tests/test_cli.py; awaiting CI)
+  - [ ] MCP server (official `mcp` SDK) exposing build
 - [ ] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
 - [ ] M4 Deploy + self-serve keys + pricing (needs Owner)
 - [ ] M5 First agent customers
