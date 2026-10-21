@@ -11,7 +11,7 @@
   - [x] build() orchestrator (build.py) + end-to-end test (tests/test_build.py; awaiting CI)
 - [ ] M2 CLI + MCP server
   - [x] CLI `pressready build` (cli.py + tests/test_cli.py; awaiting CI)
-  - [ ] MCP server (official `mcp` SDK) exposing build
+  - [x] MCP server (mcp_server.py, FastMCP: build_book, spine_width, list_trim_sizes; tests/test_mcp.py; awaiting CI)
 - [ ] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
 - [ ] M4 Deploy + self-serve keys + pricing (needs Owner)
 - [ ] M5 First agent customers

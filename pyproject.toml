@@ -3,13 +3,14 @@ name = "pressready"
 version = "0.0.1"
 description = "Manuscript in, publish-ready book out: EPUB, print interior PDF and wrap cover for AI agents."
 requires-python = ">=3.11"
-dependencies = ["reportlab>=4.0", "pillow"]
+dependencies = ["reportlab>=4.0", "pillow", "mcp>=1.2"]
 
 [project.optional-dependencies]
 dev = ["pytest", "pypdf"]
 
 [project.scripts]
 pressready = "pressready.cli:main"
+pressready-mcp = "pressready.mcp_server:main"
 
 [build-system]
 requires = ["setuptools>=68"]
