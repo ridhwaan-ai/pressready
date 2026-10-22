@@ -28,7 +28,9 @@ def test_create_and_download():
     r = client.post("/v1/books", json=payload())
     assert r.status_code == 201, r.text
     body = r.json()
-    assert body["status"] == "done" and body["checklist"]["ok"] is True
+    # a tiny sample book legitimately warns (short page count, empty description)
+    assert body["status"] == "done" and body["checklist"]["ok"] is False
+    assert any("description" in w for w in body["checklist"]["warnings"])
     got = client.get(f"/v1/books/{body['id']}")
     assert got.status_code == 200
     epub = client.get(body["files"]["book.epub"])
