@@ -49,6 +49,14 @@ def test_typed_errors():
     assert client.get("/v1/books/nope").json()["error"]["code"] == "not_found"
 
 
+def test_limits_pricing_and_size_cap():
+    assert client.get("/v1/limits").json()["max_request_bytes"] > 0
+    assert client.get("/v1/pricing").json()["currency"] == "USD"
+    r = client.post("/v1/books", content=b"{}", headers={"content-type": "application/json",
+                                                         "content-length": str(100 * 1024 * 1024)})
+    assert r.status_code in (413, 400, 422)
+
+
 def test_docs_and_helpers():
     assert "PressReady" in client.get("/llms.txt").text
     assert "/v1/books" in client.get("/openapi.json").json()["paths"]

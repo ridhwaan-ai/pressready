@@ -8,7 +8,7 @@ import time
 import uuid
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
@@ -19,6 +19,14 @@ from .pdf import TRIM_SIZES
 
 JOB_TTL_SECONDS = 15 * 60
 MAX_JOBS = 50
+MAX_BODY_BYTES = 15 * 1024 * 1024
+LIMITS = {"max_request_bytes": MAX_BODY_BYTES, "job_ttl_seconds": JOB_TTL_SECONDS,
+          "max_active_jobs": MAX_JOBS, "trim_sizes": ["5x8", "5.5x8.5", "6x9", "8.5x11"],
+          "paper": ["white", "cream"]}
+# Placeholder until the Owner approves real pricing (M4).
+PRICING = {"currency": "USD", "status": "free_beta", "plans": [
+    {"name": "free_beta", "price_usd": 0, "builds_per_month": None,
+     "notes": "No API key needed during beta. Paid plans will be announced here."}]}
 FILES = {"book.epub": "application/epub+zip", "interior.pdf": "application/pdf",
          "cover-wrap.pdf": "application/pdf", "checklist.json": "application/json"}
 
@@ -32,6 +40,8 @@ LLMS_TXT = """# PressReady
 - GET /v1/books/{id}/files/{name} : download book.epub, interior.pdf, cover-wrap.pdf, checklist.json.
 - GET /v1/spine?pages=200&paper=cream : spine width in inches.
 - GET /v1/trim-sizes : supported trim sizes.
+- GET /v1/limits : request size, job lifetime, allowed values (JSON).
+- GET /v1/pricing : machine-readable pricing (JSON).
 - Errors: {"error": {"code": "...", "message": "what to fix"}}.
 
 ## Docs
@@ -174,6 +184,24 @@ def spine(pages: int, paper: str = "white"):
 @app.get("/v1/trim-sizes")
 def trim_sizes():
     return {"trim_sizes": {k: list(v) for k, v in TRIM_SIZES.items()}}
+
+
+@app.middleware("http")
+async def limit_body_size(request: Request, call_next):
+    declared = request.headers.get("content-length", "")
+    if declared.isdigit() and int(declared) > MAX_BODY_BYTES:
+        return _error(413, "too_large", f"request body exceeds {MAX_BODY_BYTES} bytes; shrink the cover image or split the manuscript")
+    return await call_next(request)
+
+
+@app.get("/v1/limits")
+def limits():
+    return LIMITS
+
+
+@app.get("/v1/pricing")
+def pricing():
+    return PRICING
 
 
 @app.get("/health")
