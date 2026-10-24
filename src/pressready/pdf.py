@@ -163,20 +163,24 @@ def _section_flowables(sec: Section, st: dict[str, ParagraphStyle], heading: boo
 
 def _story(book: Book, st: dict[str, ParagraphStyle], pad_pages: int) -> list:
     from html import escape
-    story: list = [_Mark(), Spacer(1, 1.6 * inch), Paragraph(escape(book.title, quote=False), st["title"])]
-    if book.subtitle:
-        story.append(Paragraph(escape(book.subtitle, quote=False), st["subtitle"]))
-    story += [Spacer(1, 0.6 * inch), Paragraph(escape(book.author, quote=False), st["author"])]
-    # copyright page (unnumbered)
-    story += [PageBreak(), _Mark(), Spacer(1, 4.0 * inch)]
-    story.append(Paragraph(escape(book.rights or f"Copyright © {book.author}. All rights reserved.",
-                                  quote=False), st["small"]))
-    for sec in book.front_matter:
-        story += _section_flowables(sec, st)
-    for sec in book.chapters:
-        story += _section_flowables(sec, st)
-    for sec in book.back_matter:
-        story += _section_flowables(sec, st)
+    if book.own_front_matter:
+        # the manuscript supplies its own title/copyright pages: start directly with its first section
+        story: list = [_Mark()]
+    else:
+        story = [_Mark(), Spacer(1, 1.6 * inch), Paragraph(escape(book.title, quote=False), st["title"])]
+        if book.subtitle:
+            story.append(Paragraph(escape(book.subtitle, quote=False), st["subtitle"]))
+        story += [Spacer(1, 0.6 * inch), Paragraph(escape(book.author, quote=False), st["author"])]
+        # copyright page (unnumbered)
+        story += [PageBreak(), _Mark(), Spacer(1, 4.0 * inch)]
+        story.append(Paragraph(escape(book.rights or f"Copyright © {book.author}. All rights reserved.",
+                                      quote=False), st["small"]))
+    body: list = []
+    for sec in book.front_matter + book.chapters + book.back_matter:
+        body += _section_flowables(sec, st)
+    if book.own_front_matter and body:
+        body = body[1:]  # drop the leading PageBreak so page 1 is not blank
+    story += body
     for _ in range(pad_pages):
         story += [PageBreak(), _BlankPage()]
     return story

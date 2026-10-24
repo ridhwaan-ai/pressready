@@ -95,13 +95,27 @@ def build_wrap_cover(book: Book, front_image: str | Path, out_path: str | Path, 
 
     # back cover text, clear of the barcode box
     if back_text.strip():
-        style = ParagraphStyle("back", fontName=_FONT, fontSize=11, leading=15, textColor=white, alignment=TA_CENTER)
         safe = SAFE_IN * inch
         bx, bw = b + safe, tw - 2 * safe
         top = H - b - safe
-        para = Paragraph(escape(back_text.strip(), quote=False).replace("\n", "<br/>"), style)
-        _, h = para.wrap(bw, top)
+        # text must stay above the barcode box (plus a small gap)
+        floor = b + safe + BARCODE_H_IN * inch + 0.2 * inch
+        avail_h = top - floor
+        html = escape(back_text.strip(), quote=False).replace("\n", "<br/>")
+        size = 11.0
+        while True:
+            style = ParagraphStyle("back", fontName=_FONT, fontSize=size, leading=size * 1.35,
+                                   textColor=white, alignment=TA_CENTER)
+            para = Paragraph(html, style)
+            _, h = para.wrap(bw, avail_h)
+            if h <= avail_h:
+                break
+            size -= 0.5
+            if size < 8:
+                raise BookError("back_text is too long to fit above the barcode area at 8 pt: "
+                                "shorten it (about 150 words fits a 5.5x8.5 cover)")
         para.drawOn(c, bx, top - h)
+        d["back_text_font_pt"] = size
 
     # spine text
     if d["spine_text_allowed"]:

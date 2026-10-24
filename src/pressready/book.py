@@ -30,6 +30,7 @@ class Book:
     chapters: list[Section] = field(default_factory=list)
     front_matter: list[Section] = field(default_factory=list)
     back_matter: list[Section] = field(default_factory=list)
+    own_front_matter: bool = False  # manuscript supplies its own title/copyright pages
 
     def validate(self) -> None:
         if not self.title.strip():
@@ -60,6 +61,7 @@ class Book:
                 raise BookError(f"book.json is missing required field '{key}'")
         known = {"title", "author", "subtitle", "series", "language", "description", "rights", "identifier"}
         book = cls(**{k: str(v) for k, v in meta.items() if k in known})
+        book.own_front_matter = meta.get("own_front_matter") is True
         book.chapters = _load_sections(root, "*.md")
         book.front_matter = _load_sections(root / "front", "*.md")
         book.back_matter = _load_sections(root / "back", "*.md")

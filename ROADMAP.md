@@ -20,3 +20,6 @@
 - [x] M4 Deploy: LIVE at https://pressready-wp38.onrender.com (2026-10-24); free tier + Gumroad license keys in code
   - [ ] Owner creates the Gumroad key product; product id + buy URL set on Render
 - [ ] M5 First agent customers
+  - [x] Back cover blurb auto-fits above the barcode box (tests written)
+  - [x] own_front_matter option (book.json + API) skips generated title/copyright pages (tests written)
+  - [ ] research/DISTRIBUTION.md (MCP registries, listing text) + one Owner request

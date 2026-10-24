@@ -67,6 +67,8 @@ def build_epub(book: Book, out: str | Path, cover: bytes | None = None, modified
     year = modified[:4]
     rights = escape(book.rights) if book.rights else f"Copyright &#169; {year} {escape(book.author)}. All rights reserved."
     files["copyright.xhtml"] = _page("Copyright", f'<div class="copyright-page"><p>{rights}</p></div>', book.language)
+    if book.own_front_matter:
+        del files["titlepage.xhtml"], files["copyright.xhtml"]
 
     pages = _body_pages(book)
     for name, sec in pages:
@@ -90,7 +92,8 @@ def build_epub(book: Book, out: str | Path, cover: bytes | None = None, modified
                                      book.language)
         manifest.append('<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>')
         spine.append("cover")
-    order = ["titlepage.xhtml", "copyright.xhtml", "nav.xhtml"] + [n for n, _ in pages]
+    generated = ["nav.xhtml"] if book.own_front_matter else ["titlepage.xhtml", "copyright.xhtml", "nav.xhtml"]
+    order = generated + [n for n, _ in pages]
     for n in order:
         iid = n.rsplit(".", 1)[0]
         if n != "nav.xhtml":

@@ -32,6 +32,14 @@ def test_wrap_mediabox_and_spine(tmp_path, art, paper):
     assert "Blurb" in page.extract_text()
 
 
+def test_back_text_shrinks_and_too_long_errors(tmp_path, art):
+    long_ok = "A fairly long blurb sentence. " * 30
+    d = build_wrap_cover(book(), art, tmp_path / "w.pdf", pages=100, trim="5x8", back_text=long_ok)
+    assert 8 <= d["back_text_font_pt"] <= 11
+    with pytest.raises(BookError, match="too long"):
+        build_wrap_cover(book(), art, tmp_path / "w2.pdf", pages=100, trim="5x8", back_text="word " * 2000)
+
+
 def test_no_spine_text_on_thin_book(tmp_path, art):
     d = build_wrap_cover(book(), art, tmp_path / "w.pdf", pages=60)
     assert d["spine_text_allowed"] is False and d["spine_text_drawn"] is False
