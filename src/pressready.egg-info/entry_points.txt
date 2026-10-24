@@ -1,3 +1,0 @@
-[console_scripts]
-pressready = pressready.cli:main
-pressready-mcp = pressready.mcp_server:main
