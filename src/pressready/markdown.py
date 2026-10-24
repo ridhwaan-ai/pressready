@@ -21,7 +21,8 @@ def inline(text: str) -> str:
 
 def to_xhtml(md: str, drop_first_h1: bool = True) -> str:
     """Convert Markdown to an XHTML fragment. The first '# ' heading is dropped (it is the section title)."""
-    blocks = re.split(r"\n\s*\n", md.replace("\r\n", "\n").strip())
+    md = re.sub(r"(?m)^[ \t]*</?[A-Za-z][^>\n]*>[ \t]*$", "", md.replace("\r\n", "\n"))  # raw HTML tag lines
+    blocks = re.split(r"\n\s*\n", md.strip())
     out = []
     dropped = not drop_first_h1
     for block in blocks:
@@ -35,7 +36,7 @@ def to_xhtml(md: str, drop_first_h1: bool = True) -> str:
         h = re.match(r"^(#{1,6})\s+(.*?)\s*#*$", first)
         if h and len(lines) == 1:
             level = len(h.group(1))
-            if level == 1 and not dropped:
+            if level <= 3 and not dropped and not out:  # the opening heading is the section title
                 dropped = True
                 continue
             out.append(f"<h{level}>{inline(h.group(2))}</h{level}>")

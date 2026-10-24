@@ -4,7 +4,7 @@ Rules baked in (see reference/LESSONS.md and KDP print guidelines):
 - exact trim page size, mirrored margins with a gutter safe up to ~800 pages
 - chapters start on a right-hand (odd) page; the skipped left page is blank and unnumbered
 - page count is padded to an even number, at least 24 pages
-- fonts are embedded (KDP rejects unembedded fonts), so we use the TrueType Vera family shipped with ReportLab
+- fonts are embedded (KDP rejects unembedded fonts): the bundled Crimson Text serif (OFL)
 """
 from __future__ import annotations
 
@@ -37,7 +37,7 @@ OUTER_MARGIN_IN = 0.5
 TOP_MARGIN_IN = 0.75
 BOTTOM_MARGIN_IN = 0.75
 
-_FONT = "PRVera"
+_FONT = "PRSerif"
 _fonts_ready = False
 
 
@@ -52,12 +52,16 @@ def _register_fonts() -> None:
     global _fonts_ready
     if _fonts_ready:
         return
-    d = Path(os.path.dirname(reportlab.__file__)) / "fonts"
-    for suffix, file in (("", "Vera.ttf"), ("-Bold", "VeraBd.ttf"), ("-Italic", "VeraIt.ttf"),
-                         ("-BoldItalic", "VeraBI.ttf")):
+    # Crimson Text (SIL Open Font License, see fonts/OFL.txt): a book serif we may embed and redistribute
+    d = Path(__file__).parent / "fonts"
+    for suffix, file in (("", "CrimsonText-Regular.ttf"), ("-Bold", "CrimsonText-Bold.ttf"),
+                         ("-Italic", "CrimsonText-Italic.ttf"), ("-BoldItalic", "CrimsonText-BoldItalic.ttf")):
         pdfmetrics.registerFont(TTFont(_FONT + suffix, str(d / file)))
     pdfmetrics.registerFontFamily(_FONT, normal=_FONT, bold=_FONT + "-Bold", italic=_FONT + "-Italic",
                                   boldItalic=_FONT + "-BoldItalic")
+    # ReportLab otherwise declares Helvetica (not embedded) on every page, which KDP's checker can flag
+    from reportlab import rl_config
+    rl_config.canvas_basefontname = _FONT
     _fonts_ready = True
 
 

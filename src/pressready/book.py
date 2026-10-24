@@ -73,7 +73,8 @@ def _load_sections(folder: Path, pattern: str) -> list[Section]:
     out = []
     for f in sorted(folder.glob(pattern)):
         text = f.read_text(encoding="utf-8")
-        m = re.search(r"^#\s+(.+?)\s*$", text, re.M)
+        body = re.sub(r"(?m)^[ \t]*</?[A-Za-z][^>\n]*>[ \t]*$", "", text).strip()
+        m = re.match(r"#{1,3}\s+(.+?)\s*$", body.split("\n", 1)[0]) if body else None
         title = m.group(1) if m else f.stem.replace("-", " ").replace("_", " ").strip().title()
         out.append(Section(title, text))
     return out
