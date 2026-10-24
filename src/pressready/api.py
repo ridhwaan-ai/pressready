@@ -12,7 +12,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
-from . import spine_width_in
+from . import access, spine_width_in
 from .book import Book, BookError, Section
 from .build import build
 from .pdf import TRIM_SIZES
@@ -41,7 +41,8 @@ LLMS_TXT = """# PressReady
 - GET /v1/spine?pages=200&paper=cream : spine width in inches.
 - GET /v1/trim-sizes : supported trim sizes.
 - GET /v1/limits : request size, job lifetime, allowed values (JSON).
-- GET /v1/pricing : machine-readable pricing (JSON).
+- GET /v1/pricing : machine-readable pricing (JSON). Free tier: a few builds per day, no key.
+  Unlimited: send a license key as 'Authorization: Bearer <key>' (see buy_url in /v1/pricing).
 - Errors: {"error": {"code": "...", "message": "what to fix"}}.
 
 ## Docs
@@ -114,9 +115,19 @@ def _sections(items: list[SectionIn]) -> list[Section]:
     return out
 
 
+def _client(request: Request) -> str:
+    fwd = request.headers.get("x-forwarded-for", "")
+    return fwd.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+
+
 @app.post("/v1/books", status_code=201)
-def create_book(req: BookIn):
+def create_book(req: BookIn, request: Request):
     _sweep()
+    auth = request.headers.get("authorization", "")
+    key = auth[7:].strip() if auth.lower().startswith("bearer ") else None
+    allowed, code, message = access.check(key, _client(request))
+    if not allowed:
+        return _error(402 if code == "free_limit" else 401, code, message)
     if len(_jobs) >= MAX_JOBS:
         return _error(503, "busy", "too many active jobs; retry in a few minutes")
     if req.trim not in TRIM_SIZES:
@@ -201,7 +212,7 @@ def limits():
 
 @app.get("/v1/pricing")
 def pricing():
-    return PRICING
+    return access.pricing()
 
 
 @app.get("/health")
