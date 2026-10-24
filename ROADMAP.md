@@ -1,6 +1,6 @@
 # PressReady roadmap
 
-- [ ] M1 Core library: Markdown chapters -> EPUB + interior PDF + wrap cover PDF (tests, CI green)
+- [x] M1 Core library: Markdown chapters -> EPUB + interior PDF + wrap cover PDF (tests, CI green)
   - [x] Book model + folder loader (book.py)
   - [x] Minimal Markdown -> XHTML (markdown.py)
   - [x] EPUB 3 writer (epub.py) + structure tests (awaiting first CI result)
@@ -9,13 +9,14 @@
   - [ ] Wrap cover PDF (cover.py + tests written, awaiting CI; todo: barcode-box guide option, back-cover styling)
   - [x] Upload checklist JSON (checklist.py: title warnings, AI disclosure; awaiting CI)
   - [x] build() orchestrator (build.py) + end-to-end test (tests/test_build.py; awaiting CI)
-- [ ] M2 CLI + MCP server
+- [x] M2 CLI + MCP server
   - [x] CLI `pressready build` (cli.py + tests/test_cli.py; awaiting CI)
   - [x] MCP server (mcp_server.py, FastMCP: build_book, spine_width, list_trim_sizes; tests/test_mcp.py; awaiting CI)
-- [ ] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
+- [x] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
   - [x] api.py: POST/GET /v1/books, file downloads, typed errors, /llms.txt, /quickstart.txt (in-memory 15-min jobs; tests/test_api.py; awaiting CI)
   - [x] /v1/limits, /v1/pricing (free_beta placeholder), 15 MB body cap (awaiting CI)
   - [x] render.yaml (free web service, /health) and publish.yml (release-triggered, Trusted Publishing; no release made yet)
   - [x] README with CLI/MCP/API usage
-- [ ] M4 Deploy + self-serve keys + pricing (needs Owner)
+- [x] M4 Deploy: LIVE at https://pressready-wp38.onrender.com (2026-10-24); free tier + Gumroad license keys in code
+  - [ ] Owner creates the Gumroad key product; product id + buy URL set on Render
 - [ ] M5 First agent customers
