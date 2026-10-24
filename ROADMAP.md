@@ -15,6 +15,7 @@
 - [ ] M3 HTTP API + OpenAPI + agent docs (llms.txt, quickstart)
   - [x] api.py: POST/GET /v1/books, file downloads, typed errors, /llms.txt, /quickstart.txt (in-memory 15-min jobs; tests/test_api.py; awaiting CI)
   - [x] /v1/limits, /v1/pricing (free_beta placeholder), 15 MB body cap (awaiting CI)
-  - [ ] todo: README agent docs, render.yaml, publish.yml
+  - [x] render.yaml (free web service, /health) and publish.yml (release-triggered, Trusted Publishing; no release made yet)
+  - [x] README with CLI/MCP/API usage
 - [ ] M4 Deploy + self-serve keys + pricing (needs Owner)
 - [ ] M5 First agent customers
