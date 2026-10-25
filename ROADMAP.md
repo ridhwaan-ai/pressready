@@ -23,4 +23,5 @@
   - [x] Back cover blurb auto-fits above the barcode box (tests written)
   - [x] own_front_matter option (book.json + API) skips generated title/copyright pages (tests written)
   - [x] research/DISTRIBUTION.md (MCP registries, listing text); pyproject keywords/readme added
+  - [x] Version 0.1.0, MIT LICENSE, classifiers, server.json, README mcp-name line (pre-release metadata; untested by CI until next run)
   - [ ] Owner approves listings + first PyPI release (request raised)

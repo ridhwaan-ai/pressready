@@ -1,5 +1,5 @@
 """PressReady: manuscript in, publish-ready book out."""
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 
 def spine_width_in(pages: int, paper: str = "white") -> float:

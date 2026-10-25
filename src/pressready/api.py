@@ -88,7 +88,7 @@ class BookIn(BaseModel):
     back_text: str = ""
 
 
-app = FastAPI(title="PressReady", version="0.0.1",
+app = FastAPI(title="PressReady", version="0.1.0",
               description="Manuscript in, publish-ready book out (EPUB, interior PDF, wrap cover, KDP checklist).")
 _jobs: dict[str, dict] = {}
 

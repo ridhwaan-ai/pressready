@@ -7,7 +7,10 @@ Manuscript in, publish-ready book out. Give it Markdown chapters, metadata and a
 3. Full-wrap paperback cover PDF (spine width computed from page count and paper type)
 4. Upload checklist (JSON) with the values KDP asks for
 
-Status: pre-release. Not deployed or published to PyPI yet. See ROADMAP.md.
+<!-- mcp-name: io.github.ridhwaan-ai/pressready -->
+mcp-name: io.github.ridhwaan-ai/pressready
+
+Status: live API at https://pressready-wp38.onrender.com (free tier, sleeps when idle). First PyPI release pending. See ROADMAP.md.
 
 ## CLI
 

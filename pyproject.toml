@@ -1,6 +1,13 @@
 [project]
 name = "pressready"
-version = "0.0.1"
+version = "0.1.0"
+license = { text = "MIT" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Developers",
+  "Topic :: Text Processing :: Markup",
+]
 description = "Manuscript in, publish-ready book out: EPUB, print interior PDF and wrap cover for AI agents."
 readme = "README.md"
 keywords = ["mcp", "model-context-protocol", "ai-agents", "kdp", "epub", "book-publishing", "pdf", "self-publishing"]
