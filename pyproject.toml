@@ -2,6 +2,8 @@
 name = "pressready"
 version = "0.0.1"
 description = "Manuscript in, publish-ready book out: EPUB, print interior PDF and wrap cover for AI agents."
+readme = "README.md"
+keywords = ["mcp", "model-context-protocol", "ai-agents", "kdp", "epub", "book-publishing", "pdf", "self-publishing"]
 requires-python = ">=3.11"
 dependencies = ["reportlab>=4.0", "pillow", "mcp>=1.2,<2", "fastapi>=0.110", "uvicorn>=0.29"]
 

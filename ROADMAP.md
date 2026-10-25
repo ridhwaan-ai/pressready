@@ -22,4 +22,5 @@
 - [ ] M5 First agent customers
   - [x] Back cover blurb auto-fits above the barcode box (tests written)
   - [x] own_front_matter option (book.json + API) skips generated title/copyright pages (tests written)
-  - [ ] research/DISTRIBUTION.md (MCP registries, listing text) + one Owner request
+  - [x] research/DISTRIBUTION.md (MCP registries, listing text); pyproject keywords/readme added
+  - [ ] Owner approves listings + first PyPI release (request raised)
