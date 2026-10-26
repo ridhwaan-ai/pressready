@@ -20,11 +20,16 @@ def make_parser() -> argparse.ArgumentParser:
     b.add_argument("--paper", default="white", choices=["white", "cream"])
     b.add_argument("--keyword", action="append", default=[], help="KDP keyword (repeatable)")
     b.add_argument("--back-text", default="", help="back cover blurb (default: book description)")
+    sub.add_parser("mcp", help="run the MCP server over stdio")
     return p
 
 
 def main(argv: list[str] | None = None) -> int:
     args = make_parser().parse_args(argv)
+    if args.command == "mcp":
+        from .mcp_server import main as run_mcp
+        run_mcp()
+        return 0
     try:
         checklist = build(args.manuscript, args.cover, args.out, trim=args.trim, paper=args.paper,
                           keywords=args.keyword or None, back_text=args.back_text)

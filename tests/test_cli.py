@@ -18,6 +18,20 @@ def test_cli_build(tmp_path, capsys):
     assert (out / "book.epub").is_file() and (out / "checklist.json").is_file()
 
 
+def test_cli_mcp_subcommand_starts_server(monkeypatch):
+    called = []
+    monkeypatch.setattr("pressready.mcp_server.main", lambda: called.append(1))
+    assert main(["mcp"]) == 0
+    assert called == [1]
+
+
+def test_server_json_launches_mcp_subcommand():
+    from pathlib import Path
+    server = json.loads((Path(__file__).resolve().parents[1] / "server.json").read_text(encoding="utf-8"))
+    args = server["packages"][0]["packageArguments"]
+    assert args == [{"type": "positional", "value": "mcp"}]
+
+
 def test_cli_missing_cover(tmp_path, capsys):
     ms = tmp_path / "ms"
     make_manuscript(ms)

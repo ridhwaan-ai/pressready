@@ -9,6 +9,7 @@
       "identifier": "pressready",
       "version": "0.1.0",
       "runtimeHint": "uvx",
+      "packageArguments": [{ "type": "positional", "value": "mcp" }],
       "transport": { "type": "stdio" }
     }
   ]

@@ -25,6 +25,6 @@
   - [x] research/DISTRIBUTION.md (MCP registries, listing text); pyproject keywords/readme added
   - [x] Version 0.1.0, MIT LICENSE, classifiers, server.json, README mcp-name line (pre-release metadata; untested by CI until next run)
   - [x] tests/test_release_metadata.py (server.json/pyproject/README consistency, fonts packaged; awaiting CI)
-  - [ ] Check: `uvx pressready` runs the CLI script, not the MCP server; verify server.json runtimeHint/args before registry submit
+  - [x] Added `pressready mcp` subcommand; server.json packageArguments ["mcp"] so `uvx pressready mcp` starts the MCP server (tests written, awaiting CI)
   - [x] Owner approved listings + first PyPI release (R0001); next: Owner makes repo public and publishes release v0.1.0
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
