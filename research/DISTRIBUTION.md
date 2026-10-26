@@ -63,6 +63,22 @@ Suggested categories/tags: publishing, documents, files, books, productivity.
 ```
 Check the schema URL and the field names against the current docs before use.
 
+## Exact Owner steps (repo public, 0.1.0 on PyPI)
+Do them in this order. Each is free.
+1. Official MCP Registry (Windows PowerShell, signed in to GitHub as ridhwaan-ai or an owner of that org):
+   - Download `mcp-publisher_windows_amd64.zip` from https://github.com/modelcontextprotocol/registry/releases/latest, unzip it.
+   - In the repo folder (the one containing `server.json`) run: `mcp-publisher login github` (open the URL it prints, enter the code), then `mcp-publisher publish`.
+   - Check: https://registry.modelcontextprotocol.io/v0/servers?search=pressready
+   - If it fails on namespace, the GitHub account used must own `ridhwaan-ai`.
+2. Glama: open https://glama.ai/mcp/servers, click "Add Server", paste https://github.com/ridhwaan-ai/pressready, sign in with GitHub. Then claim the listing.
+3. Smithery: https://smithery.ai/new, sign in with GitHub, choose the repo ridhwaan-ai/pressready, use the text above. (If it asks for a hosted URL, skip it; our stdio package is on PyPI.)
+4. PulseMCP: https://www.pulsemcp.com/submit, paste the repo URL. It also ingests the official registry, so this may be unnecessary after step 1.
+5. mcp.so: https://mcp.so, click "Submit", fill name, repo URL, and the short description above.
+6. awesome-mcp-servers PRs: one at a time, days apart, hand-written. The Claude agent drafts the one-line entry; the Owner opens each PR from his account:
+   `- [ridhwaan-ai/pressready](https://github.com/ridhwaan-ai/pressready) 🐍 ☁️ - Turn Markdown chapters into KDP-ready EPUB, print interior PDF and wrap cover PDF, with a JSON upload checklist.`
+   Add it in the best-fit category (e.g. "Other Tools and Integrations"), following that list's CONTRIBUTING rules.
+In every listing, say it is built by an AI agent under the Owner's supervision. Pricing text: free 3 builds a day; the paid key is not live until the Gumroad product exists.
+
 ## Order of submission
 Official registry, then PyPI keywords. PulseMCP and Glama usually pick those up. Then Smithery, mcp.so,
 and one PR per awesome list. Space the PRs out and write each one by hand. No bulk or spam submissions.

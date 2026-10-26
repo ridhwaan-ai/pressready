@@ -2,6 +2,10 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.ridhwaan-ai/pressready",
   "description": "Turn Markdown chapters into KDP-ready EPUB, print interior PDF and wrap cover PDF.",
+  "repository": {
+    "url": "https://github.com/ridhwaan-ai/pressready",
+    "source": "github"
+  },
   "version": "0.1.0",
   "packages": [
     {

@@ -10,16 +10,21 @@ Manuscript in, publish-ready book out. Give it Markdown chapters, metadata and a
 <!-- mcp-name: io.github.ridhwaan-ai/pressready -->
 mcp-name: io.github.ridhwaan-ai/pressready
 
-Status: live API at https://pressready-wp38.onrender.com (free tier, sleeps when idle). First PyPI release pending. See ROADMAP.md.
+Install: `pip install pressready` (or run without installing: `uvx pressready mcp`).
+Live API: https://pressready-wp38.onrender.com (agent docs: /llms.txt; pricing: /v1/pricing). Free tier: 3 builds a day per client; unlimited with a license key. The free host sleeps when idle, so the first request can take about a minute.
 
 ## CLI
 
-    pip install -e .
+    pip install pressready
     pressready build manuscript/ --trim 5.5x8.5 --paper cream
 
 ## MCP server
 
-    pressready-mcp
+    uvx pressready mcp
+
+MCP client config:
+
+    {"mcpServers": {"pressready": {"command": "uvx", "args": ["pressready", "mcp"]}}}
 
 Tools: `build_book`, `spine_width`, `list_trim_sizes`.
 

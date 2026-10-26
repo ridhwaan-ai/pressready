@@ -27,4 +27,6 @@
   - [x] tests/test_release_metadata.py (server.json/pyproject/README consistency, fonts packaged; awaiting CI)
   - [x] Added `pressready mcp` subcommand; server.json packageArguments ["mcp"] so `uvx pressready mcp` starts the MCP server (tests written, awaiting CI)
   - [x] Owner approved listings + first PyPI release (R0001); next: Owner makes repo public and publishes release v0.1.0
+  - [x] 0.1.0 LIVE on PyPI, repo public (2026-10-26); server.json has repository field; README first screen updated; exact listing steps in research/DISTRIBUTION.md
+  - [ ] Owner performs the directory submissions (request R0002)
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
