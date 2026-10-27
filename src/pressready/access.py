@@ -77,8 +77,10 @@ def check(key: str | None, client: str) -> tuple[bool, str, str]:
         _free_counts.pop(k)
     used = _free_counts.get((client, day), 0)
     if used >= free_per_day():
-        more = f" Buy a key at {buy_url()} and send it as 'Authorization: Bearer <key>'." if buy_url() else ""
-        return False, "free_limit", f"free tier is {free_per_day()} builds per day per client and it is used up.{more}"
+        more = (f" To continue now, a person can buy an unlimited-builds key at {buy_url()}; then retry with the header "
+                "'Authorization: Bearer <key>'.") if buy_url() else ""
+        return False, "free_limit", (f"free tier is {free_per_day()} builds per day per client and it is used up. "
+                                     f"The quota resets at 00:00 UTC.{more}")
     _free_counts[(client, day)] = used + 1
     return True, "", ""
 

@@ -18,7 +18,8 @@
   - [x] render.yaml (free web service, /health) and publish.yml (release-triggered, Trusted Publishing; no release made yet)
   - [x] README with CLI/MCP/API usage
 - [x] M4 Deploy: LIVE at https://pressready-wp38.onrender.com (2026-10-24); free tier + Gumroad license keys in code
-  - [ ] Owner creates the Gumroad key product; product id + buy URL set on Render
+  - [x] Gumroad key product live ($9/month); product id + buy URL set on Render
+  - [x] Friendlier free_limit 402 message (reset time + buy link; test written, awaiting CI)
 - [ ] M5 First agent customers
   - [x] Back cover blurb auto-fits above the barcode box (tests written)
   - [x] own_front_matter option (book.json + API) skips generated title/copyright pages (tests written)

@@ -1,5 +1,7 @@
 # Gumroad key product: Owner steps
 
+> **DONE (2026-10-24).** Product is live ($9/month, https://saibridhwaan.gumroad.com/l/zrvizy) and Render env vars are set. This file is kept for reference only.
+
 Goal: sell a licence key that unlocks unlimited builds (sent as `Authorization: Bearer <key>`).
 Code is already in `src/pressready/access.py`. Nothing here is automated; the Owner does it.
 

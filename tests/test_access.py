@@ -13,6 +13,9 @@ def test_free_tier_counts_per_client(monkeypatch):
     assert access.check(None, "a")[0] and access.check(None, "a")[0]
     ok, code, msg = access.check(None, "a")
     assert not ok and code == "free_limit" and "2 builds per day" in msg
+    assert "resets at 00:00 UTC" in msg
+    monkeypatch.setenv("PRESSREADY_BUY_URL", "https://example.com/buy")
+    assert "https://example.com/buy" in access.check(None, "a")[2]
     assert access.check(None, "b")[0]  # another client still has its own quota
 
 
