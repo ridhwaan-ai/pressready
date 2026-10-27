@@ -31,4 +31,5 @@
   - [x] 0.1.0 LIVE on PyPI, repo public (2026-10-26); server.json has repository field; README first screen updated; exact listing steps in research/DISTRIBUTION.md
   - [ ] Owner performs the directory submissions (request R0002, approved)
   - [x] research/GUMROAD-SETUP.md (Owner steps for the key product); research/AGENT-TOOL-IDEAS.md started
+  - [x] README end-to-end curl example + Claude Desktop/Cursor MCP note
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
