@@ -32,4 +32,5 @@
   - [ ] Owner performs the directory submissions (request R0002, approved)
   - [x] research/GUMROAD-SETUP.md (Owner steps for the key product); research/AGENT-TOOL-IDEAS.md started
   - [x] README end-to-end curl example + Claude Desktop/Cursor MCP note
+  - [x] AGENT-TOOL-IDEAS.md now has sourced evidence (2026-10-28); idea: front-cover validator in checklist
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
