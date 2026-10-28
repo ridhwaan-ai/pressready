@@ -29,13 +29,46 @@ def title_warnings(title: str, subtitle: str = "") -> list[str]:
     return out
 
 
+MAX_COVER_BYTES = 50 * 1024 * 1024
+
+
+def cover_image_report(path) -> dict:
+    """Check a front-cover image against KDP's Kindle cover rules; returns facts plus warnings."""
+    from pathlib import Path
+
+    from PIL import Image
+
+    p = Path(path)
+    warnings: list[str] = []
+    size = p.stat().st_size
+    with Image.open(p) as im:
+        fmt, (w, h) = im.format, im.size
+    if fmt not in ("JPEG", "TIFF", "PNG"):
+        warnings.append(f"cover format is {fmt}; use JPEG, TIFF or PNG")
+    if min(w, h) < 625 or max(w, h) < 1000:
+        warnings.append(f"cover is {w}x{h}px; KDP needs at least 1000px on the longest side "
+                        "(2560x1600 recommended)")
+    elif max(w, h) > 10000:
+        warnings.append(f"cover is {w}x{h}px; KDP allows at most 10000px per side")
+    if w >= h:
+        warnings.append("cover is not portrait; a front cover should be taller than wide (ratio 1.6)")
+    elif abs(h / w - 1.6) > 0.15:
+        warnings.append(f"cover ratio is {h / w:.2f}; KDP recommends height/width of 1.6")
+    if size > MAX_COVER_BYTES:
+        warnings.append("cover file exceeds 50 MB")
+    return {"format": fmt, "width_px": w, "height_px": h, "ratio": round(h / w, 3),
+            "bytes": size, "warnings": warnings}
+
+
 def build_checklist(book: Book, *, pages: int, trim: str, paper: str, spine_in: float,
                     wrap_size_in: tuple[float, float], keywords: list[str] | None = None,
                     ai_generated_text: bool = True, ai_generated_images: bool = False,
-                    files: dict[str, str] | None = None) -> dict:
+                    files: dict[str, str] | None = None, cover_report: dict | None = None) -> dict:
     """Every value the KDP paperback/Kindle forms ask for, plus warnings an agent should fix."""
     keywords = [k.strip() for k in (keywords or []) if k.strip()]
     warnings = title_warnings(book.title, book.subtitle)
+    if cover_report:
+        warnings += [f"front cover: {w}" for w in cover_report["warnings"]]
     if len(book.title) + len(book.subtitle) > MAX_TITLE:
         warnings.append(f"title + subtitle exceed {MAX_TITLE} characters")
     if not book.description.strip():
@@ -76,6 +109,7 @@ def build_checklist(book: Book, *, pages: int, trim: str, paper: str, spine_in: 
             "spine_width_in": spine_in,
             "cover_wrap_size_in": {"width": wrap_size_in[0], "height": wrap_size_in[1]},
         },
+        "front_cover_image": {k: v for k, v in (cover_report or {}).items() if k != "warnings"},
         "files": files or {},
         "warnings": warnings,
         "ok": not warnings,

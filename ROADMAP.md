@@ -33,4 +33,5 @@
   - [x] research/GUMROAD-SETUP.md (Owner steps for the key product); research/AGENT-TOOL-IDEAS.md started
   - [x] README end-to-end curl example + Claude Desktop/Cursor MCP note
   - [x] AGENT-TOOL-IDEAS.md now has sourced evidence (2026-10-28); idea: front-cover validator in checklist
+  - [x] Front-cover image validator (cover_image_report: format, px size, ratio, bytes) feeds checklist warnings + front_cover_image (tests written, awaiting CI)
   - [ ] (old) Owner approves listings + first PyPI release (request raised)

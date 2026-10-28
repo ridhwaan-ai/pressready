@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 from .book import Book, BookError
-from .checklist import build_checklist
+from .checklist import build_checklist, cover_image_report
 from .cover import build_wrap_cover
 from .epub import build_epub
 from .pdf import build_interior_pdf
@@ -32,6 +32,7 @@ def build(book: Book | str | Path, cover_image: str | Path, out_dir: str | Path,
     checklist = build_checklist(
         book, pages=pages, trim=trim, paper=paper, spine_in=d["spine"],
         wrap_size_in=(d["width"], d["height"]), keywords=keywords,
+        cover_report=cover_image_report(cover_image),
         files={"kindle_epub": epub_path.name, "interior_pdf": interior_path.name,
                "cover_pdf": wrap_path.name})
     (out / "checklist.json").write_text(json.dumps(checklist, indent=2), encoding="utf-8")
