@@ -44,6 +44,8 @@ LLMS_TXT = """# PressReady
 - GET /v1/pricing : machine-readable pricing (JSON). Free tier: a few builds per day, no key.
   Unlimited: send a license key as 'Authorization: Bearer <key>' (see buy_url in /v1/pricing).
 - Errors: {"error": {"code": "...", "message": "what to fix"}}.
+- The checklist includes a front_cover_image check (format, pixel size, aspect ratio, file size) and warnings,
+  so fix a bad cover before uploading to KDP.
 
 ## Docs
 - OpenAPI: /openapi.json
