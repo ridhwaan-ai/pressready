@@ -60,6 +60,28 @@ def cover_image_report(path) -> dict:
             "bytes": size, "warnings": warnings}
 
 
+def manuscript_warnings(book: Book) -> list[str]:
+    """Lint chapters: empty, duplicate titles, placeholders, unsupported Markdown."""
+    out: list[str] = []
+    seen: set[str] = set()
+    for s in book.chapters:
+        name = f"chapter '{s.title}'"
+        words = len(re.findall(r"\w+", s.markdown))
+        if words == 0:
+            out.append(f"{name} is empty")
+        key = s.title.strip().lower()
+        if key in seen:
+            out.append(f"{name}: duplicate chapter title")
+        seen.add(key)
+        if re.search(r"^\s*!\[", s.markdown, re.M):
+            out.append(f"{name} contains an inline image; images in chapters are not supported and will be dropped")
+        if re.search(r"^\s*\|.*\|\s*$", s.markdown, re.M):
+            out.append(f"{name} contains a Markdown table; tables are not supported, use prose")
+        if re.search(r"\b(TODO|TBD|FIXME|lorem ipsum)\b|\[insert", s.markdown, re.I):
+            out.append(f"{name} contains placeholder text (TODO/TBD/lorem ipsum/[insert])")
+    return out
+
+
 def build_checklist(book: Book, *, pages: int, trim: str, paper: str, spine_in: float,
                     wrap_size_in: tuple[float, float], keywords: list[str] | None = None,
                     ai_generated_text: bool = True, ai_generated_images: bool = False,
@@ -67,6 +89,7 @@ def build_checklist(book: Book, *, pages: int, trim: str, paper: str, spine_in: 
     """Every value the KDP paperback/Kindle forms ask for, plus warnings an agent should fix."""
     keywords = [k.strip() for k in (keywords or []) if k.strip()]
     warnings = title_warnings(book.title, book.subtitle)
+    warnings += [f"manuscript: {w}" for w in manuscript_warnings(book)]
     if cover_report:
         warnings += [f"front cover: {w}" for w in cover_report["warnings"]]
     if len(book.title) + len(book.subtitle) > MAX_TITLE:
