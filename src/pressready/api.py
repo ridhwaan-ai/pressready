@@ -46,6 +46,8 @@ LLMS_TXT = """# PressReady
 - Errors: {"error": {"code": "...", "message": "what to fix"}}.
 - The checklist includes a front_cover_image check (format, pixel size, aspect ratio, file size) and warnings,
   so fix a bad cover before uploading to KDP.
+- The checklist warnings also flag manuscript problems (empty or duplicate chapters, images, tables,
+  placeholder text such as TODO or Lorem ipsum); read them before uploading.
 
 ## Docs
 - OpenAPI: /openapi.json

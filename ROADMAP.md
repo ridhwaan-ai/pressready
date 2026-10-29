@@ -36,4 +36,5 @@
   - [x] Front-cover image validator (cover_image_report: format, px size, ratio, bytes) feeds checklist warnings + front_cover_image (tests written, awaiting CI)
   - [x] llms.txt mentions the front_cover_image check (2026-10-28)
   - [x] Manuscript lint (manuscript_warnings: empty/duplicate chapters, images, tables, placeholders) feeds checklist warnings (tests written, awaiting CI)
+  - [x] llms.txt mentions manuscript lint warnings (2026-10-29)
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
