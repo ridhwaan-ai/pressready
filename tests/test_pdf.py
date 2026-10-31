@@ -38,7 +38,10 @@ def test_chapters_start_on_odd_pages_and_fonts_embedded(tmp_path):
 
 def test_running_heads(tmp_path):
     out = tmp_path / "interior.pdf"
-    build_interior_pdf(sample_book(2), out)
+    long_body = "\n\n".join(f"Paragraph {i} with plain words. " * 12 for i in range(60))
+    book = Book(title="Tiny & Brave", author="A. Writer",
+                chapters=[Section("Chapter 1", f"# Chapter 1\n\n{long_body}")])
+    build_interior_pdf(book, out)
     pages = PdfReader(str(out)).pages
     texts = [p.extract_text() or "" for p in pages]
     opener = next(i for i, t in enumerate(texts) if "Chapter 1" in t[:40])
