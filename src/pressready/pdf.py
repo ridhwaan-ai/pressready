@@ -75,6 +75,16 @@ class _Mark(Flowable):
         self.canv._pr_no_number = True
 
 
+class _NoHead(Flowable):
+    """Zero-size marker: the page it lands on gets no running head (chapter opening pages)."""
+
+    def wrap(self, aw, ah):
+        return 0, 0
+
+    def draw(self):
+        self.canv._pr_no_head = True
+
+
 class _FillIfVerso(Flowable):
     """Fills the rest of an even (left-hand) page so the next flowable starts on an odd page."""
 
@@ -136,6 +146,7 @@ def _section_flowables(sec: Section, st: dict[str, ParagraphStyle], heading: boo
     out: list = [PageBreak(), _FillIfVerso()]
     if heading:
         out.append(Paragraph(escape(sec.title, quote=False), st["h1"]))
+        out.append(_NoHead())
     after_break = True
     for line in to_xhtml(sec.markdown).split("\n"):
         line = line.strip()
@@ -198,9 +209,15 @@ def _render(book: Book, trim: tuple[float, float], font_size: float, pad_pages: 
 
     def footer(canv, _doc):
         seen[0] = max(seen[0], canv.getPageNumber())
+        no_head = getattr(canv, "_pr_no_head", False)
+        canv._pr_no_head = False
         if getattr(canv, "_pr_no_number", False):
             canv._pr_no_number = False
             return
+        if not no_head:
+            # running head: author on left-hand pages, title on right-hand pages
+            canv.setFont(_FONT + "-Italic", 9)
+            canv.drawCentredString(w / 2, h - 0.5 * inch, book.author if canv.getPageNumber() % 2 == 0 else book.title)
         canv.setFont(_FONT, 9)
         canv.drawCentredString(w / 2, 0.4 * inch, str(canv.getPageNumber()))
 

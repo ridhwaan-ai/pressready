@@ -37,4 +37,5 @@
   - [x] llms.txt mentions the front_cover_image check (2026-10-28)
   - [x] Manuscript lint (manuscript_warnings: empty/duplicate chapters, images, tables, placeholders) feeds checklist warnings (tests written, awaiting CI)
   - [x] llms.txt mentions manuscript lint warnings (2026-10-29)
+  - [x] Interior PDF running heads (title recto / author verso; none on chapter openers or unnumbered pages; test written, awaiting CI). Todo: print TOC
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
