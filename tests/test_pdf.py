@@ -63,8 +63,11 @@ def test_print_toc_page_numbers(tmp_path):
     texts = [p.extract_text() or "" for p in PdfReader(str(out)).pages]
     toc_idx = next(i for i, t in enumerate(texts) if "Contents" in t)
     beta_idx = next(i for i, t in enumerate(texts) if i > toc_idx and t.strip().startswith("Beta"))
-    toc_lines = [ln.split() for ln in texts[toc_idx].splitlines() if ln.startswith(("Alpha", "Beta"))]
-    printed = {ln[0]: int(ln[-1]) for ln in toc_lines if len(ln) > 1}
+    import re
+    # extraction may put title and number on one line or two: match across whitespace
+    printed = {name: int(m.group(1)) for name in ("Alpha", "Beta")
+               if (m := re.search(rf"{name}\s+(\d+)", texts[toc_idx]))}
+    assert set(printed) == {"Alpha", "Beta"}, texts[toc_idx]
     assert printed["Beta"] == beta_idx + 1
     assert printed["Alpha"] < printed["Beta"]
 
