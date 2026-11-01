@@ -54,6 +54,21 @@ def test_running_heads(tmp_path):
     assert all("A. Writer" in t for t in verso)
 
 
+def test_print_toc_page_numbers(tmp_path):
+    out = tmp_path / "interior.pdf"
+    body = "\n\n".join(f"Paragraph {i} with plain words. " * 12 for i in range(30))
+    book = Book(title="Tiny", author="A. Writer",
+                chapters=[Section("Alpha", f"# Alpha\n\n{body}"), Section("Beta", f"# Beta\n\n{body}")])
+    build_interior_pdf(book, out, toc=True)
+    texts = [p.extract_text() or "" for p in PdfReader(str(out)).pages]
+    toc_idx = next(i for i, t in enumerate(texts) if "Contents" in t)
+    beta_idx = next(i for i, t in enumerate(texts) if i > toc_idx and t.strip().startswith("Beta"))
+    toc_lines = [ln.split() for ln in texts[toc_idx].splitlines() if ln.startswith(("Alpha", "Beta"))]
+    printed = {ln[0]: int(ln[-1]) for ln in toc_lines if len(ln) > 1}
+    assert printed["Beta"] == beta_idx + 1
+    assert printed["Alpha"] < printed["Beta"]
+
+
 def test_bad_trim():
     with pytest.raises(BookError):
         parse_trim("7x7")

@@ -85,6 +85,20 @@ class _NoHead(Flowable):
         self.canv._pr_no_head = True
 
 
+class _Anchor(Flowable):
+    """Zero-size marker: records the page number it lands on (for the printed contents page)."""
+
+    def __init__(self, store: dict, key: int):
+        super().__init__()
+        self.store, self.key = store, key
+
+    def wrap(self, aw, ah):
+        return 0, 0
+
+    def draw(self):
+        self.store[self.key] = self.canv.getPageNumber()
+
+
 class _FillIfVerso(Flowable):
     """Fills the rest of an even (left-hand) page so the next flowable starts on an odd page."""
 
@@ -172,7 +186,20 @@ def _section_flowables(sec: Section, st: dict[str, ParagraphStyle], heading: boo
     return out
 
 
-def _story(book: Book, st: dict[str, ParagraphStyle], pad_pages: int) -> list:
+def _toc_flowables(sections: list[Section], st: dict[str, ParagraphStyle], pages: dict, width: float) -> list:
+    from html import escape
+    from reportlab.platypus import Table, TableStyle
+    rows = [[Paragraph(escape(s.title, quote=False), st["first"]),
+             Paragraph(str(pages.get(i, 0)), ParagraphStyle("tocn", parent=st["first"], alignment=2))]
+            for i, s in enumerate(sections)]
+    table = Table(rows, colWidths=[width - 0.6 * inch, 0.6 * inch])
+    table.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "TOP"), ("LEFTPADDING", (0, 0), (-1, -1), 0),
+                               ("RIGHTPADDING", (0, 0), (-1, -1), 0), ("BOTTOMPADDING", (0, 0), (-1, -1), 5)]))
+    return [PageBreak(), _FillIfVerso(), _Mark(), Paragraph("Contents", st["h1"]), table]
+
+
+def _story(book: Book, st: dict[str, ParagraphStyle], pad_pages: int, toc: bool = False,
+           toc_pages: dict | None = None, toc_store: dict | None = None, text_width: float = 4 * inch) -> list:
     from html import escape
     if book.own_front_matter:
         # the manuscript supplies its own title/copyright pages: start directly with its first section
@@ -187,17 +214,29 @@ def _story(book: Book, st: dict[str, ParagraphStyle], pad_pages: int) -> list:
         story.append(Paragraph(escape(book.rights or f"Copyright © {book.author}. All rights reserved.",
                                       quote=False), st["small"]))
     body: list = []
-    for sec in book.front_matter + book.chapters + book.back_matter:
-        body += _section_flowables(sec, st)
+    sections = book.front_matter + book.chapters + book.back_matter
+    for i, sec in enumerate(sections):
+        flow = _section_flowables(sec, st)
+        if toc_store is not None:
+            flow.insert(2, _Anchor(toc_store, i))  # after PageBreak + _FillIfVerso: lands on the opener page
+        body += flow
     if book.own_front_matter and body:
         body = body[1:]  # drop the leading PageBreak so page 1 is not blank
+    if toc and sections:
+        story += _toc_flowables(sections, st, toc_pages or {}, text_width)
     story += body
     for _ in range(pad_pages):
         story += [PageBreak(), _BlankPage()]
     return story
 
 
-def _render(book: Book, trim: tuple[float, float], font_size: float, pad_pages: int) -> tuple[bytes, int]:
+def _render(book: Book, trim: tuple[float, float], font_size: float, pad_pages: int,
+            toc: bool = False, _toc_pages: dict | None = None) -> tuple[bytes, int]:
+    if toc and _toc_pages is None:
+        # pass 1 measures chapter start pages; pass 2 prints them (the contents page has the same length both times)
+        store: dict = {}
+        _render(book, trim, font_size, pad_pages, True, store)
+        return _render(book, trim, font_size, pad_pages, True, dict(store))
     _register_fonts()
     w, h = trim[0] * inch, trim[1] * inch
     st = _styles(font_size)
@@ -230,17 +269,20 @@ def _render(book: Book, trim: tuple[float, float], font_size: float, pad_pages: 
         PageTemplate("recto", [frame("r", INNER_MARGIN_IN, OUTER_MARGIN_IN)], onPageEnd=footer),
         PageTemplate("verso", [frame("v", OUTER_MARGIN_IN, INNER_MARGIN_IN)], onPageEnd=footer),
     ])
-    doc.build(_story(book, st, pad_pages))
+    text_w = w - (INNER_MARGIN_IN + OUTER_MARGIN_IN) * inch
+    doc.build(_story(book, st, pad_pages, toc, _toc_pages if toc else None,
+                     _toc_pages if toc else None, text_w))
     return buf.getvalue(), seen[0]
 
 
-def build_interior_pdf(book: Book, out_path: str | Path, trim: str = "5.5x8.5", font_size: float = 10.5) -> int:
-    """Write the interior PDF and return its page count (even, >= 24)."""
+def build_interior_pdf(book: Book, out_path: str | Path, trim: str = "5.5x8.5", font_size: float = 10.5,
+                       toc: bool = False) -> int:
+    """Write the interior PDF and return its page count (even, >= 24). toc=True adds a printed Contents page."""
     book.validate()
     size = parse_trim(trim)
-    data, pages = _render(book, size, font_size, 0)
+    data, pages = _render(book, size, font_size, 0, toc)
     target = max(MIN_PAGES, pages + pages % 2)
     if target != pages:
-        data, pages = _render(book, size, font_size, target - pages)
+        data, pages = _render(book, size, font_size, target - pages, toc)
     Path(out_path).write_bytes(data)
     return pages
