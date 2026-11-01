@@ -26,7 +26,7 @@ def build(book: Book | str | Path, cover_image: str | Path, out_dir: str | Path,
 
     epub_path, interior_path, wrap_path = out / "book.epub", out / "interior.pdf", out / "cover-wrap.pdf"
     build_epub(book, epub_path, cover=cover_image.read_bytes())
-    pages = build_interior_pdf(book, interior_path, trim=trim)
+    pages = build_interior_pdf(book, interior_path, trim=trim, toc=book.print_toc)
     d = build_wrap_cover(book, cover_image, wrap_path, pages=pages, trim=trim, paper=paper,
                          back_text=back_text or book.description)
     checklist = build_checklist(

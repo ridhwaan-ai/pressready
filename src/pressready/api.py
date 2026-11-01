@@ -82,6 +82,7 @@ class BookIn(BaseModel):
     rights: str = ""
     identifier: str = ""
     own_front_matter: bool = False  # true: front_matter holds your own title/copyright pages; we add none
+    print_toc: bool = False  # true: add a printed Contents page (with page numbers) to the interior PDF
     chapters: list[SectionIn] = Field(min_length=1)
     front_matter: list[SectionIn] = []
     back_matter: list[SectionIn] = []
@@ -148,7 +149,7 @@ def create_book(req: BookIn, request: Request):
     try:
         book = Book(title=req.title, author=req.author, subtitle=req.subtitle, series=req.series,
                     language=req.language, description=req.description, rights=req.rights,
-                    identifier=req.identifier, own_front_matter=req.own_front_matter, chapters=_sections(req.chapters),
+                    identifier=req.identifier, own_front_matter=req.own_front_matter, print_toc=req.print_toc, chapters=_sections(req.chapters),
                     front_matter=_sections(req.front_matter), back_matter=_sections(req.back_matter))
         cover_path = root / "cover-input.img"
         cover_path.write_bytes(cover)

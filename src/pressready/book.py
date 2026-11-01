@@ -31,6 +31,7 @@ class Book:
     front_matter: list[Section] = field(default_factory=list)
     back_matter: list[Section] = field(default_factory=list)
     own_front_matter: bool = False  # manuscript supplies its own title/copyright pages
+    print_toc: bool = False  # add a printed Contents page to the interior PDF
 
     def validate(self) -> None:
         if not self.title.strip():
@@ -62,6 +63,7 @@ class Book:
         known = {"title", "author", "subtitle", "series", "language", "description", "rights", "identifier"}
         book = cls(**{k: str(v) for k, v in meta.items() if k in known})
         book.own_front_matter = meta.get("own_front_matter") is True
+        book.print_toc = meta.get("print_toc") is True
         book.chapters = _load_sections(root, "*.md")
         book.front_matter = _load_sections(root / "front", "*.md")
         book.back_matter = _load_sections(root / "back", "*.md")
