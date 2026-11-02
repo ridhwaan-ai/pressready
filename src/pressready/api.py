@@ -48,6 +48,8 @@ LLMS_TXT = """# PressReady
   so fix a bad cover before uploading to KDP.
 - The checklist warnings also flag manuscript problems (empty or duplicate chapters, images, tables,
   placeholder text such as TODO or Lorem ipsum); read them before uploading.
+- Optional body fields: print_toc (true adds a printed Contents page with page numbers to the interior PDF)
+  and own_front_matter (true if front_matter already holds your title/copyright pages).
 
 ## Docs
 - OpenAPI: /openapi.json
