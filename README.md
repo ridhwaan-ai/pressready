@@ -18,6 +18,10 @@ Live API: https://pressready-wp38.onrender.com (agent docs: /llms.txt; pricing: 
     pip install pressready
     pressready build manuscript/ --trim 5.5x8.5 --paper cream
 
+Optional `manuscript/book.json` flags (used by the CLI and MCP; the API takes the same names as body fields):
+`"print_toc": true` adds a printed Contents page with page numbers to the interior PDF;
+`"own_front_matter": true` skips our title/copyright pages when your front matter already has them.
+
 ## MCP server
 
     uvx pressready mcp

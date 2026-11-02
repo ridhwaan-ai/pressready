@@ -38,5 +38,5 @@
   - [x] Manuscript lint (manuscript_warnings: empty/duplicate chapters, images, tables, placeholders) feeds checklist warnings (tests written, awaiting CI)
   - [x] llms.txt mentions manuscript lint warnings (2026-10-29)
   - [x] Interior PDF running heads (title recto / author verso; none on chapter openers or unnumbered pages; test written, awaiting CI). Todo: print TOC
-  - [x] Printed Contents page for the interior PDF (build_interior_pdf(toc=True), two-pass page numbers; test written, awaiting CI). Exposed as book.json `print_toc` + API field `print_toc` (tests written, awaiting CI). Documented in llms.txt (2026-11-02, awaiting CI). Todo: README mention, check CLI/MCP pass-through
+  - [x] Printed Contents page for the interior PDF (build_interior_pdf(toc=True), two-pass page numbers; test written, awaiting CI). Exposed as book.json `print_toc` + API field `print_toc` (tests written, awaiting CI). Documented in llms.txt (2026-11-02, awaiting CI). README mentions both flags; CLI/MCP pass them through book.json via build() -> Book.from_dir (checked by reading code, 2026-11-02)
   - [ ] (old) Owner approves listings + first PyPI release (request raised)
