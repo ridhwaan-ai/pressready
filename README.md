@@ -55,7 +55,7 @@ Jobs are in memory and expire after about 15 minutes.
     # -> {"id": "...", "status": "done", "checklist": {...}, "files": {"book.epub": "/v1/books/<id>/files/book.epub", ...}}
     curl -O $HOST/v1/books/<id>/files/book.epub
 
-Unlimited builds: add `-H 'Authorization: Bearer <license key>'` (key: https://saibridhwaan.gumroad.com/l/zrvizy).
+Unlimited builds: add `-H 'Authorization: Bearer <license key>'` (key: https://stickfigurefiles.gumroad.com/l/zrvizy).
 
 ### Claude Desktop / Cursor
 

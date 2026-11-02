@@ -32,6 +32,27 @@ def test_server_json_launches_mcp_subcommand():
     assert args == [{"type": "positional", "value": "mcp"}]
 
 
+def test_cli_print_toc_adds_contents_page(tmp_path, capsys):
+    from pypdf import PdfReader
+
+    art = tmp_path / "front.png"
+    Image.new("RGB", (800, 1200), (30, 90, 160)).save(art)
+    pages = {}
+    for flag in (False, True):
+        ms = tmp_path / f"ms{flag}"
+        make_manuscript(ms)
+        meta = json.loads((ms / "book.json").read_text(encoding="utf-8"))
+        meta["print_toc"] = flag
+        (ms / "book.json").write_text(json.dumps(meta), encoding="utf-8")
+        out = tmp_path / f"out{flag}"
+        assert main(["build", str(ms), "--cover", str(art), "--out", str(out), "--trim", "5x8"]) == 0
+        capsys.readouterr()
+        reader = PdfReader(str(out / "interior.pdf"))
+        pages[flag] = " ".join((pg.extract_text() or "") for pg in reader.pages).lower()
+    assert "contents" in pages[True]
+    assert "contents" not in pages[False]
+
+
 def test_cli_missing_cover(tmp_path, capsys):
     ms = tmp_path / "ms"
     make_manuscript(ms)
